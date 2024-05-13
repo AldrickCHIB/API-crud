@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Person;
+use App\Models\People;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,18 +13,11 @@ class PeopleControler extends Controller
 
     public function index()
     {
-        $person = Person::all();
-        if ($person->isEmpty()) {
-            $data = [
-                "message" => "No se encontraron personas",
-                "status" => 404,
-            ];
-            return response()->json($data, 404);
-        }
+        $people = People::all();
 
         $data = [
-            "message"=> "Listado de personas",
-            "data" => $person,
+            "message"=> "Listado de peoples",
+            "data" => $people,
             "status" => 200 
         ];  
         return response()->json($data, 200);
@@ -33,10 +26,10 @@ class PeopleControler extends Controller
 
     public function show($id)
     {
-        $person = Person::find($id);
-        if (!$person) {
+        $people = People::find($id);
+        if (!$people) {
             $data = [
-                "message" => "No se enocntró la persona",
+                "message" => "No se enocntró la people",
                 "status" => 404,
             ];
             return response()->json($data, 404);
@@ -44,10 +37,10 @@ class PeopleControler extends Controller
 
         $data = [
             "message" => "Usuario encontrado",
-            "data" => $person,
-            "status" => 404,
+            "data" => $people,
+            "status" => 200,
         ];
-        return response()->json($data, 404);
+        return response()->json($data, 200);
     }
 
     public function store(Request $request)
@@ -55,7 +48,7 @@ class PeopleControler extends Controller
 
         $validator = Validator::make($request->all(), [
             "name" => "required",
-            "email" => "required|email|unique:person",
+            "email" => "required|email|unique:people",
             "password" => "required",
             'phone' => 'required',
             "language" => "required"
@@ -69,24 +62,24 @@ class PeopleControler extends Controller
             ];
             return response()->json($data, 400);
         }
-        $person = Person::create([
+        $people = People::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'phone' => $request->phone,
             'language' => $request->language
         ]);
-        if (!$person) {
+        if (!$people) {
             $data = [
-                "message" => "Error al crear la persona",
+                "message" => "Error al crear la people",
                 "status" => 500,
             ];
             return response()->json($data, 500);
         }
 
         $data = [
-            "message" => "Persona creada correctamente",
-            "data" => $person,
+            "message" => "people creada correctamente",
+            "data" => $people,
             "status" => 201,
         ];
 
@@ -96,10 +89,10 @@ class PeopleControler extends Controller
 
     public function update(Request $request, $id)
     {
-        $person = Person::find($id);
-        if (!$person) {
+        $people = People::find($id);
+        if (!$people) {
             $data = [
-                "message" => "No se enocntró la persona",
+                "message" => "No se enocntró la people",
                 "status" => 404,
             ];
             return response()->json($data, 404);
@@ -107,7 +100,7 @@ class PeopleControler extends Controller
 
         $validator = Validator::make($request->all(), [
             "name" => "required",
-            "email" => "required|email|unique:person",
+            "email" => "required|email|unique:people",
             "password" => "required",
             'phone' => 'required',
             "language" => "required"
@@ -121,16 +114,16 @@ class PeopleControler extends Controller
             ];
             return response()->json($data, 400);
         }
-        $person->name = $request->name;
-        $person->email = $request->email;
-        $person->password = $request->password;
-        $person->phone = $request->phone;
-        $person->language = $request->language;
-        $person->save();
+        $people->name = $request->name;
+        $people->email = $request->email;
+        $people->password = $request->password;
+        $people->phone = $request->phone;
+        $people->language = $request->language;
+        $people->save();
 
         $data = [
             "message"=> "Usuario actualizado correctamente",
-            "data" => $person,
+            "data" => $people,
             "status"=> 200,
         ];
 
@@ -140,16 +133,16 @@ class PeopleControler extends Controller
 
     public function destroy($id)
     {
-        $person = Person::find($id);
-        if (!$person) {
+        $people = People::find($id);
+        if (!$people) {
             $data = [
-                "message" => "No se enocntró la persona",
+                "message" => "No se encontró la people",
                 "status" => 404,
             ];
             return response()->json($data, 404);
         }
 
-        $person->delete();
+        $people->delete();
         $data = [
             "message" => "Usuario eliminado",
             "status" => 200,
