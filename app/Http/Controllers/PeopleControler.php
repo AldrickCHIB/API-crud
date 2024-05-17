@@ -100,7 +100,7 @@ class PeopleControler extends Controller
 
         $validator = Validator::make($request->all(), [
             "name" => "required",
-            "email" => "required|email|unique:people",
+            "email" => "required|email",
             "password" => "required",
             'phone' => 'required',
             "language" => "required"
