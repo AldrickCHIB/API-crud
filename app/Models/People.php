@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class People extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens, Authenticatable;
 
     public function cars()
     {

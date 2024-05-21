@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\People;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class PeopleControler extends Controller
 {
@@ -16,12 +19,28 @@ class PeopleControler extends Controller
         $people = People::all();
 
         $data = [
-            "message"=> "Listado de peoples",
+            "message" => "Listado de peoples",
             "data" => $people,
-            "status" => 200 
-        ];  
+            "status" => 200
+        ];
         return response()->json($data, 200);
 
+    }
+
+    public function login(Request $request) {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('token')->plainTextToken;
+            $cookie = cookie('cookie_token', $token, 60 * 24);
+            return response(["token"=>$token], Response::HTTP_OK)->withoutCookie($cookie);
+        } else {
+            return response(["message"=> "Credenciales inválidas"],Response::HTTP_UNAUTHORIZED);
+        }        
     }
 
     public function show($id)
@@ -65,7 +84,7 @@ class PeopleControler extends Controller
         $people = People::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'language' => $request->language
         ]);
@@ -122,9 +141,9 @@ class PeopleControler extends Controller
         $people->save();
 
         $data = [
-            "message"=> "Usuario actualizado correctamente",
+            "message" => "Usuario actualizado correctamente",
             "data" => $people,
-            "status"=> 200,
+            "status" => 200,
         ];
 
         return response()->json($data, 200);

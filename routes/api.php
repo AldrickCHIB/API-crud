@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/people', [PeopleControler::class, 'index']);
 
+Route::post('/login', [PeopleControler::class, 'login']);
+
 Route::get('/people/{id}', [PeopleControler::class, 'show']);
 
-Route::post('/people', [PeopleControler::class, 'store']);
+Route::post('/people', [PeopleControler::class, 'register']);
 
 Route::put('/people/{id}', [PeopleControler::class, 'update']);
 
