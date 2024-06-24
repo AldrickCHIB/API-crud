@@ -23,7 +23,7 @@ Route::post('/login', [PeopleControler::class, 'login']);
 
 Route::get('/people/{id}', [PeopleControler::class, 'show']);
 
-Route::post('/people', [PeopleControler::class, 'register']);
+Route::post('/people', [PeopleControler::class, 'store']);
 
 Route::put('/people/{id}', [PeopleControler::class, 'update']);
 
